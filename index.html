@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <meta name="robots" content="noindex, nofollow">
+
     <meta property="og:type" content="website">
     <meta property="og:title" content="은호의 첫번째 생일에 초대합니다.">
     <meta property="og:description" content="2026년 5월 9일 (토) 오후 12시, 수막새">
@@ -22,103 +24,89 @@
             justify-content: center;
         }
         .container {
-            max-width: 480px; /* 모바일 화면 크기에 맞춤 */
+            max-width: 480px;
             background-color: #ffffff;
             padding: 30px 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             text-align: center;
             box-sizing: border-box;
         }
-        h1 {
-            font-size: 24px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-        .greeting {
-            font-size: 15px;
-            line-height: 1.8;
-            margin: 30px 0;
-            color: #666;
-        }
+        h1 { font-size: 24px; color: #555; margin-bottom: 10px; }
+        .greeting { font-size: 15px; line-height: 1.8; margin: 30px 0; color: #666; }
         
         /* 정보 및 지도 영역 */
-        .info-box {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-        .info-box h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #444;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .info-box p {
-            margin: 8px 0;
-            font-size: 14px;
-            text-align: center;
-        }
+        .info-box { background-color: #f7f7f7; padding: 20px; border-radius: 10px; margin-bottom: 40px; text-align: left; }
+        .info-box h3 { margin-top: 0; font-size: 16px; color: #444; text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .info-box p { margin: 8px 0; font-size: 14px; text-align: center; }
         
-        /* 지도 화면(iframe) 비율 유지 */
-        .map-container {
-            margin-top: 20px;
-            width: 100%;
-            height: 250px;
-            background-color: #eaeaea;
+        /* 지도 화면 */
+        .map-container { margin-top: 20px; width: 100%; height: 250px; background-color: #eaeaea; }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        .map-buttons { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { flex: 1; padding: 12px 0; text-decoration: none; text-align: center; border-radius: 8px; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .naver { background-color: #03C75A; color: #ffffff; }
+        .kakao { background-color: #FEE500; color: #000000; }
+
+        /* 사진 갤러리 */
+        .gallery-title { font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .gallery img { 
+            width: 100%; 
+            aspect-ratio: 1 / 1; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            cursor: pointer; /* 클릭 가능한 손가락 모양 */
         }
-        .map-container iframe {
+
+        /* --- 사진 확대(모달) 스타일 --- */
+        .modal {
+            display: none; /* 평소에는 숨김 */
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            background-color: rgba(0,0,0,0.9); /* 검은색 반투명 배경 */
         }
-
-        /* 지도 앱 연결 버튼 */
-        .map-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            max-height: 80vh;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: contain;
         }
-        .btn {
-            flex: 1;
-            padding: 12px 0;
-            text-decoration: none;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 14px;
+        /* 닫기 버튼 */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #fff;
+            font-size: 35px;
             font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 1000;
         }
-        .naver { 
-            background-color: #03C75A; 
-            color: #ffffff; 
+        /* 좌우 이동 버튼 */
+        .prev-btn, .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            user-select: none;
+            z-index: 1000;
         }
-        .kakao { 
-            background-color: #FEE500; 
-            color: #000000; 
-        }
-
-        /* 20장 사진을 위한 갤러리 (그리드 레이아웃) */
-        .gallery-title {
-            font-size: 18px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3열로 배치 */
-            gap: 5px; /* 사진 사이 간격 */
-        }
-        .gallery img {
-            width: 100%;
-            aspect-ratio: 1 / 1; /* 1:1 정방형 비율 맞춤 */
-            object-fit: cover; /* 사진이 찌그러지지 않게 꽉 채움 */
-            border-radius: 5px;
-        }
+        .prev-btn { left: 0; }
+        .next-btn { right: 0; }
     </style>
 </head>
 <body>
@@ -143,7 +131,6 @@
         <div class="map-container">
             <iframe src="https://maps.google.com/maps?q=경기도 하남시 서하남로451번길 13-13&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe>
         </div>
-
         <div class="map-buttons">
             <a href="https://map.naver.com/v5/search/경기도 하남시 서하남로451번길 13-13" class="btn naver" target="_blank">네이버 지도</a>
             <a href="https://map.kakao.com/link/search/경기도 하남시 서하남로451번길 13-13" class="btn kakao" target="_blank">카카오맵</a>
@@ -174,6 +161,67 @@
         <img src="19.jpg" alt="사진20">
     </div>
 </div>
+
+<div id="imageModal" class="modal">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <span class="prev-btn" onclick="changeImage(-1)">&#10094;</span>
+    <img class="modal-content" id="expandedImg">
+    <span class="next-btn" onclick="changeImage(1)">&#10095;</span>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const images = [];
+    
+    // 갤러리의 모든 이미지 정보를 배열에 담고, 클릭 이벤트 추가
+    document.querySelectorAll('.gallery img').forEach((img, index) => {
+        images.push(img.src);
+        img.onclick = () => openModal(index);
+    });
+
+    // 모달창 열기
+    function openModal(index) {
+        currentIndex = index;
+        document.getElementById('imageModal').style.display = 'block';
+        updateModalImage();
+    }
+
+    // 모달창 닫기
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    // 사진 좌우 변경
+    function changeImage(step) {
+        currentIndex += step;
+        if (currentIndex >= images.length) currentIndex = 0; // 마지막에서 다음으로 가면 처음으로
+        if (currentIndex < 0) currentIndex = images.length - 1; // 처음에서 이전으로 가면 마지막으로
+        updateModalImage();
+    }
+
+    function updateModalImage() {
+        document.getElementById('expandedImg').src = images[currentIndex];
+    }
+
+    // 모바일 터치 스와이프 기능
+    let touchstartX = 0;
+    let touchendX = 0;
+    const modal = document.getElementById('imageModal');
+    
+    modal.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    });
+
+    modal.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        if (touchendX < touchstartX - 40) changeImage(1); // 왼쪽으로 넘기기
+        if (touchendX > touchstartX + 40) changeImage(-1); // 오른쪽으로 넘기기
+    }
+</script>
 
 </body>
 </html>
